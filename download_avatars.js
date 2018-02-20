@@ -35,9 +35,9 @@ function downloadImageByURL(url, filePath) {
 }
 
 //This function converts data into a deserialized object format, and calls the
-//download function in order to generate new images in a specified directory
+//downloadimage function in order to generate new images in a specified directory
 
-//It also tests whether the resource was found, or
+//It also tests whether the resource was found, or whether access is restricted.
 function deserializeData(err, res, result){
   var entry_path;
   if(err){
@@ -69,7 +69,7 @@ function runTests(){
   }
 }
 
-//This functiont tests whether a .env file exists, and if so, whether it has the necessary entries.
+//This function tests whether a .env file exists, and if so, whether it has the necessary entries.
 function envCheck(){
   fs.readdir("./", function(err, files){
     var envFound = false;
