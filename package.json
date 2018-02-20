@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bartnic1/github-avatar-downloader#readme",
   "dependencies": {
+    "dotenv": "^5.0.0",
     "request": "^2.83.0"
   }
 }
