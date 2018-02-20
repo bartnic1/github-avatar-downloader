@@ -1,9 +1,6 @@
 require('./node_modules/dotenv/lib/main.js').config();
 var request = require('request');
-// var token = require('./secrets');
 var fs = require('fs');
-
-console.log(process.env.BASIC);
 
 var args = process.argv.slice(2);
 var repoOwner = args[0];
