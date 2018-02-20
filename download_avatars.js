@@ -5,7 +5,6 @@ var fs = require('fs');
 var args = process.argv.slice(2);
 var repoOwner = args[0];
 var repoName = args[1];
-var storageDirectory = "./"+repoName.toString()+"-avatars";
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
@@ -15,7 +14,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
     url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
     headers: {
       'User-Agent': process.env.USERNAME,
-      'Authorization': `token ${process.env.GITHUB_TOKEN}`
+      'Authorization': 'token '+ process.env.GITHUB_TOKEN
     }
   };
   request(options, function(err, res, body) {
@@ -59,17 +58,8 @@ function deserializeData(err, res, result){
   }
 }
 
-//This part performs secondary tests, running only if key variables are defined from the terminal
-function runTests(){
-  if(repoOwner !== undefined && repoName !== undefined){
-    getRepoContributors(repoOwner, repoName, deserializeData);
-  }
-  else{
-    console.log('Invalid input: Must enter "Node download_avatars.js <repoOwner> <repoName>"');
-  }
-}
-
 //This function tests whether a .env file exists, and if so, whether it has the necessary entries.
+//This is the last check before the program runs.
 function envCheck(){
   fs.readdir("./", function(err, files){
     var envFound = false;
@@ -83,7 +73,7 @@ function envCheck(){
           console.log("No key GITHUB_TOKEN found");
         }
         else{
-          runTests();
+          getRepoContributors(repoOwner, repoName, deserializeData);
         }
       }
     }
@@ -95,7 +85,7 @@ function envCheck(){
 
 //This function checks if the avatars directory exists before running further tests.
 //If not, it creates it.
-function avatarCheck(){
+function startDirChecks(){
   fs.readdir(storageDirectory, function(err, files){
     if(err){
       fs.mkdir(storageDirectory, function(){
@@ -108,5 +98,16 @@ function avatarCheck(){
   });
 }
 
-//This runs the program
-avatarCheck();
+//This starts the checks and, if they pass, the program
+function keywordCheck(){
+  if(repoOwner !== undefined && repoName !== undefined){
+    storageDirectory = "./"+repoName.toString()+"-avatars"
+    startDirChecks();
+  }
+  else{
+    console.log('Invalid input: Must enter "Node download_avatars.js <repoOwner> <repoName>"');
+  }
+}
+
+//Run the first function to start the testing process
+keywordCheck();
